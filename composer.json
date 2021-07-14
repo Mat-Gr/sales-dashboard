@@ -7,6 +7,11 @@
             "App\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Mateusz Grochala",
@@ -15,5 +20,11 @@
     ],
     "require": {
         "php": "^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit --testdox tests"
     }
 }
