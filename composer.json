@@ -1,0 +1,19 @@
+{
+    "name": "mat/sales-dashboard",
+    "description": "A simple sales dashboard",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mateusz Grochala",
+            "email": "mateusz.grochala@yahoo.dk"
+        }
+    ],
+    "require": {
+        "php": "^8.0"
+    }
+}
