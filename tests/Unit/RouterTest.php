@@ -56,6 +56,9 @@ class RouterTest extends TestCase
     {
         $response = Router::getResponse([]);
 
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI']    = '/test?query=1';
+
         $this->assertEquals(404, http_response_code());
         $this->assertStringContainsString(
             '404',
