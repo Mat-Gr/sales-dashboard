@@ -42,7 +42,7 @@ class Router
         $params = !str_starts_with($params, '/') ? "/{$params}" : $params;
 
         $regex = str_replace('/', '\/', $route);
-        return preg_match('/^'.($regex).'$/', $params, $matches,
+        return preg_match('/^'.($regex).'($|\?)/', $params, $matches,
                 PREG_OFFSET_CAPTURE) === 1;
     }
 
