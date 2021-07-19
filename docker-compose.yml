@@ -20,6 +20,8 @@ services:
         restart: 'always'
         volumes: 
             - mariadb:/var/lib/mysql
+        ports:
+            - "9906:3306"
         environment:
             MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
             MYSQL_USER: "${MYSQL_USER}"
