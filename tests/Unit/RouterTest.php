@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Controllers\Interfaces\ControllerInterface;
+use App\Lib\Abstracts\BaseResponse;
 use App\Lib\Router;
 use PHPUnit\Framework\TestCase;
 
@@ -11,27 +12,39 @@ class RouterTest extends TestCase
 
     public function testCanCorrectlyResolveRegisteredRoute()
     {
-        // Setup the main Controller class, which we will attempt to resolve
+        // Setup the main Controller and Response, which we will attempt to resolve
         $mainController = $this->getMockBuilder(ControllerInterface::class)
             ->addMethods(['testAction'])
             ->getMock();
 
+        $mainResponse = $this->getMockForAbstractClass(BaseResponse::class);
+
+        $mainResponse
+            ->method('__toString')
+            ->willReturn('Test Response');
+
         $mainController
             ->method('testAction')
-            ->willReturn('Test Response');
+            ->willReturn($mainResponse);
 
         $mainController
             ->expects($this->once())
             ->method('testAction');
 
-        // Setup the secondary Controller class, which we don't want to resolve
+        // Setup the secondary Controller and Response, which we don't want to resolve
         $secondaryController = $this->getMockBuilder(ControllerInterface::class)
             ->addMethods(['testAction'])
             ->getMock();
 
+        $secondaryResponse = $this->getMockForAbstractClass(BaseResponse::class);
+
+        $secondaryResponse
+            ->method('__toString')
+            ->willReturn('Test Response 2');
+
         $secondaryController
             ->method('testAction')
-            ->willReturn('Test Response 2');
+            ->willReturn($secondaryResponse);
 
         $secondaryController
             ->expects($this->never())
@@ -41,8 +54,8 @@ class RouterTest extends TestCase
         $_SERVER['REQUEST_URI']    = '/test?query=1';
 
         $response = Router::getResponse([
-            Router::get('/test', $mainController, 'testAction'),
             Router::get('/test/action', $secondaryController, 'testAction'),
+            Router::get('/test', $mainController, 'testAction'),
         ]);
 
         $this->assertEquals(200, http_response_code());
