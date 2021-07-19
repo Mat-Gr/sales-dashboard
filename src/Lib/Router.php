@@ -3,6 +3,7 @@
 namespace App\Lib;
 
 use App\Controllers\Interfaces\ControllerInterface;
+use App\Lib\Abstracts\BaseResponse;
 
 class Router
 {
@@ -11,20 +12,24 @@ class Router
 
     public static function getResponse(array $routes): string
     {
-        if (empty($routes)) {
-            http_response_code(404);
+        foreach ($routes as $route) {
+            if ($route instanceof BaseResponse) {
+                http_response_code($route->getStatus());
 
-            return 'Error 404: Couldn\'t resolve the requested url';
+                return $route;
+            }
         }
 
-        // TODO - return response
+        http_response_code(404);
+
+        return 'Error 404: Couldn\'t resolve the requested url';
     }
 
     public static function get(
         string $route,
         ControllerInterface $controller,
         string $action
-    ): ?array {
+    ): ?BaseResponse {
         if (!self::uriMatchesRoute($route)) {
             return null;
         }
