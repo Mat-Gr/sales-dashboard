@@ -14,7 +14,7 @@ class DatabaseTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
 
-        $connection = new DatabaseConnection;
+        DatabaseConnection::connection();
     }
 
 }
