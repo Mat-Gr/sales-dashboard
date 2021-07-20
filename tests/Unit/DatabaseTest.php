@@ -18,6 +18,26 @@ class DatabaseTest extends TestCase
         DatabaseConnection::connection();
     }
 
+    public function testCanInsertIntoCustomersTable()
+    {
+        DatabaseConnection::connection()->exec('DELETE FROM '.Customer::TABLE);
+
+        $customer = new Customer;
+
+        $customer->first_name = 'John';
+        $customer->last_name  = 'Doe';
+        $customer->email      = 'john.doe@example.com';
+
+        $result = $customer->insert();
+
+        $this->assertNotFalse($result);
+        $this->assertEquals(1, $result->rowCount());
+        $this->assertGreaterThan(0,
+            DatabaseConnection::connection()->lastInsertId());
+
+        DatabaseConnection::connection()->exec('DELETE FROM '.Customer::TABLE);
+    }
+
     public function testCanSelectFromCustomersTable()
     {
         DatabaseConnection::connection()->exec('DELETE FROM '.Customer::TABLE);
