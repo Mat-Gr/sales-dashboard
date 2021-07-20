@@ -31,3 +31,11 @@ $ docker-compose up -d
 ```
 
 The application should be accessible at [localhost](http://localhost)
+
+### Database
+
+The database is created and stored inside a docker volume. If you wish to reset it, drop the volume and restart the container:
+
+```bash
+$ docker-compose down -v && docker-compose up -d
+```
