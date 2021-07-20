@@ -20,6 +20,7 @@ services:
         restart: 'always'
         volumes: 
             - mariadb:/var/lib/mysql
+            - ./database:/docker-entrypoint-initdb.d/
         ports:
             - "9906:3306"
         environment:
