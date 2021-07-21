@@ -6,6 +6,7 @@ namespace Tests\Unit;
 
 use App\Lib\DatabaseConnection;
 use App\Models\Customer;
+use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 
 class DatabaseTest extends TestCase
@@ -57,6 +58,32 @@ class DatabaseTest extends TestCase
         $this->assertEquals($customer->last_name, 'Doe');
         $this->assertEquals($customer->email, 'jane.doe@example.com');
         $this->assertEquals($customer->id, $id);
+
+        DatabaseConnection::connection()->exec('DELETE FROM '.Customer::TABLE);
+    }
+
+    public function testCanFakeCustomer()
+    {
+        DatabaseConnection::connection()->exec('DELETE FROM '.Customer::TABLE);
+
+        $faked = [];
+
+        Customer::fake(function (Customer $customer, Generator $faker) use (&$faked) {
+            $customer->first_name = $faker->firstName();
+            $customer->last_name  = $faker->lastName();
+            $customer->email      = $faker->email();
+
+            $faked = (array)$customer;
+
+            return $customer;
+        });
+
+        $saved = Customer::select(['first_name', 'last_name', 'email'])[0];
+
+        $this->assertInstanceOf(Customer::class, $saved);
+        $this->assertEquals($saved->first_name, $faked['first_name']);
+        $this->assertEquals($saved->last_name, $faked['last_name']);
+        $this->assertEquals($saved->email, $faked['email']);
 
         DatabaseConnection::connection()->exec('DELETE FROM '.Customer::TABLE);
     }
