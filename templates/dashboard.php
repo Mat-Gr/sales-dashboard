@@ -22,11 +22,16 @@
         <h3>Total number of orders:</h3>
         <p id="ordersTotal"></p>
 
+        <h3>Number of orders over time:</h3>
+        <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
         <h3>Seed the database</h3>
         <p>If there are no Orders, you might need to seed the database:</p>
+        <p>(You can do this multiple times, to get additional data & more interesting results)</p>
         <button id="seedBtn" class="btn btn-primary">Seed DB</button>
     </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>'
 <script src="js/main.js"></script>
 </body>
 </html>

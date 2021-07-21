@@ -2,12 +2,49 @@ function init () {
   initDateFilters()
   initSeedButton()
   updateOrdersTotal()
+  updateOrdersChart()
 }
 
 function updateOrdersTotal () {
   return fetchAllOrders()
     .then(data => {
       document.getElementById('ordersTotal').innerText = data.total
+    })
+    .catch(err => console.error(err))
+}
+
+function updateOrdersChart () {
+  return fetchGroupedOrders()
+    .then(data => {
+      const ctx = document.getElementById('myChart')
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.collection.map(obj => obj.purchase_date),
+          datasets: [{
+            data: data.collection.map(obj => obj.total),
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                stepSize: 1,
+                beginAtZero: true
+              }
+            }]
+          },
+          legend: {
+            display: false
+          }
+        }
+      })
+
     })
     .catch(err => console.error(err))
 }
@@ -23,12 +60,24 @@ function seedDatabase(e) {
         alert('Database seeded succesfully');
       }
 
-      return updateOrdersTotal()
+      onDateChange()
     })
     .catch(err => console.error(err))
 }
 
 function fetchAllOrders () {
+  return axios.get('/api/orders', { params: getDateParams() })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+}
+
+function fetchGroupedOrders () {
+  return axios.get('/api/orders/grouped', { params: getDateParams() })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+}
+
+function getDateParams() {
   const params = new URLSearchParams()
   const from   = document.getElementById('fromDate').value
   const to     = document.getElementById('toDate').value
@@ -41,9 +90,7 @@ function fetchAllOrders () {
     params.append('to', `${to} 23:59:59`)
   }
 
-  return axios.get('/api/orders', { params })
-    .then(res => res.data)
-    .catch(err => console.error(err))
+  return params;
 }
 
 function initDateFilters () {
@@ -71,6 +118,7 @@ function formatDate (date) {
 
 function onDateChange (e) {
   updateOrdersTotal()
+  updateOrdersChart()
 }
 
 init()
