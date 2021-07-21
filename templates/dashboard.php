@@ -8,12 +8,16 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="py-4">
 <main>
     <div class="container">
         <h1>Welcome to the Dashboard</h1>
+        <p>Total number of orders</p>
+        <p id="ordersTotal"></p>
     </div>
 </main>
+<script src="js/main.js"></script>
 </body>
 </html>
