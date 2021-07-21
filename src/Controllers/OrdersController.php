@@ -16,22 +16,16 @@ class OrdersController implements ControllerInterface
 
     public function index()
     {
-        $from = $_GET['from'] ?? Carbon::today()
-                ->subMonth()
-                ->startOfMonth()
-                ->format('Y-m-d H:i:s');
-        $to   = $_GET['to'] ?? Carbon::today()
-                ->subMonth()
-                ->endOfMonth()
-                ->format('Y-m-d H:i:s');
+        [$from, $to] = self::getDefaultDates();
 
         $constraints = 'WHERE purchased_at >= :from AND purchased_at < :to ORDER BY purchased_at DESC';
-        $bindings = [
+        $bindings    = [
             'from' => $from,
             'to'   => $to,
         ];
 
-        $query = DatabaseConnection::connection()->prepare('SELECT * FROM '.Order::TABLE." $constraints");
+        $query = DatabaseConnection::connection()
+            ->prepare('SELECT * FROM '.Order::TABLE." $constraints");
 
         $query->setFetchMode(PDO::FETCH_CLASS, Order::class);
         $query->execute($bindings);
@@ -44,6 +38,20 @@ class OrdersController implements ControllerInterface
             'collection' => $orders,
             'total'      => count($orders),
         ]);
+    }
+
+    private static function getDefaultDates(): array
+    {
+        return [
+            $_GET['from'] ?? Carbon::today()
+                ->subMonth()
+                ->startOfMonth()
+                ->format('Y-m-d H:i:s'),
+            $_GET['to'] ?? Carbon::today()
+                ->subMonth()
+                ->endOfMonth()
+                ->format('Y-m-d H:i:s'),
+        ];
     }
 
 }
