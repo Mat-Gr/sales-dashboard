@@ -18,8 +18,13 @@
         <input id="fromDate" type="date" name="from" value="today"/>
         <label for="toDate">To date:</label>
         <input id="toDate" type="date" name="to" value="today"/>
-        <p>Total number of orders:</p>
+
+        <h3>Total number of orders:</h3>
         <p id="ordersTotal"></p>
+
+        <h3>Seed the database</h3>
+        <p>If there are no Orders, you might need to seed the database:</p>
+        <button id="seedBtn" class="btn btn-primary">Seed DB</button>
     </div>
 </main>
 <script src="js/main.js"></script>

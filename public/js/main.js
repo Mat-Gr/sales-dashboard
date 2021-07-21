@@ -1,5 +1,6 @@
 function init () {
   initDateFilters()
+  initSeedButton()
   updateOrdersTotal()
 }
 
@@ -7,6 +8,22 @@ function updateOrdersTotal () {
   return fetchAllOrders()
     .then(data => {
       document.getElementById('ordersTotal').innerText = data.total
+    })
+    .catch(err => console.error(err))
+}
+
+function seedDatabase(e) {
+  e.target.disabled = true
+
+  return axios.get('/api/seed')
+    .then(res => {
+      e.target.disabled = false
+
+      if (res.data.success) {
+        alert('Database seeded succesfully');
+      }
+
+      return updateOrdersTotal()
     })
     .catch(err => console.error(err))
 }
@@ -39,6 +56,10 @@ function initDateFilters () {
 
   from.addEventListener('change', onDateChange)
   to.addEventListener('change', onDateChange)
+}
+
+function initSeedButton() {
+  document.getElementById('seedBtn').addEventListener('click', seedDatabase)
 }
 
 function formatDate (date) {
