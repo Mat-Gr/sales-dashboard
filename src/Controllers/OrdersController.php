@@ -14,7 +14,7 @@ use PDO;
 class OrdersController implements ControllerInterface
 {
 
-    public function index()
+    public function index(): JsonResponse
     {
         [$from, $to] = self::getDefaultDates();
 
@@ -37,6 +37,29 @@ class OrdersController implements ControllerInterface
         return new JsonResponse([
             'collection' => $orders,
             'total'      => count($orders),
+        ]);
+    }
+
+    public function grouped(): JsonResponse
+    {
+        [$from, $to] = self::getDefaultDates();
+
+        $constraints = 'WHERE purchased_at >= :from AND purchased_at < :to GROUP BY date(purchased_at) ORDER BY purchase_date ASC';
+        $bindings    = [
+            'from' => $from,
+            'to'   => $to,
+        ];
+
+        $query = DatabaseConnection::connection()
+            ->prepare('SELECT count(*) as total, date(purchased_at) purchase_date FROM '.Order::TABLE." $constraints");
+
+        $query->setFetchMode(PDO::FETCH_ASSOC);
+        $query->execute($bindings);
+
+        $orders = $query->fetchAll();
+
+        return new JsonResponse([
+            'collection' => $orders,
         ]);
     }
 

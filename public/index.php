@@ -10,4 +10,5 @@ echo Router::getResponse([
     Router::get('/', new DashboardController, 'viewDashboard'),
     Router::get('/api/seed', new DashboardController, 'seedDatabase'),
     Router::get('/api/orders', new OrdersController, 'index'),
+    Router::get('/api/orders/grouped', new OrdersController, 'grouped'),
 ]);
