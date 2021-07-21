@@ -14,7 +14,11 @@
 <main>
     <div class="container">
         <h1>Welcome to the Dashboard</h1>
-        <p>Total number of orders</p>
+        <label for="fromDate">From date:</label>
+        <input id="fromDate" type="date" name="from" value="today"/>
+        <label for="toDate">To date:</label>
+        <input id="toDate" type="date" name="to" value="today"/>
+        <p>Total number of orders:</p>
         <p id="ordersTotal"></p>
     </div>
 </main>
