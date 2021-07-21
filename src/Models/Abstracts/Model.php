@@ -4,6 +4,8 @@ namespace App\Models\Abstracts;
 
 
 use App\Lib\DatabaseConnection;
+use Closure;
+use Faker\Factory;
 use PDO;
 use PDOStatement;
 
@@ -30,5 +32,14 @@ abstract class Model
         $result = $query->execute((array)$this);
 
         return $result ? $query : false;
+    }
+
+    public static function fake(Closure $callback, int $count = 1): void
+    {
+        $faker = Factory::create();
+
+        for ($i = 0; $i < $count; $i++) {
+            $callback(new static, $faker)->insert();
+        }
     }
 }
