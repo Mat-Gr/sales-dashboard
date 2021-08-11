@@ -39,3 +39,7 @@ The database is created and stored inside a docker volume. If you wish to reset 
 ```bash
 $ docker-compose down -v && docker-compose up -d
 ```
+
+# Diagram
+
+![Visualization of the codebase](./diagram.svg)
